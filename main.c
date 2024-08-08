@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/io.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
@@ -31,6 +32,14 @@ int main(int argc, char** argv) {
         _exit(3);
     }
     close(fd);
+
+    char magic[] = "0ELF";
+    magic[0] = 0x7f;
+    if (strncmp(data, magic, 4) == 0) {
+        puts("ELF file found");
+    } else {
+        puts("ELF file not found");
+    }
 
     munmap(data, filesize);
 	return 0;
